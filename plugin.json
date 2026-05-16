@@ -1,0 +1,22 @@
+{
+  "slug": "vercel",
+  "name": "Vercel",
+  "version": "0.1.1",
+  "target_url": "https://vercel.com/login",
+  "protected_url": "https://vercel.com/{{workspace_name}}",
+  "protected_url_vars": [
+    "workspace_name"
+  ],
+  "skills": [
+    {
+      "slug": "delete-a-project-e5a96490",
+      "path": "skills/delete-a-project-e5a96490"
+    }
+  ],
+  "compatibility": {
+    "conxa_runtime": ">=1.0.0"
+  },
+  "metadata": {
+    "repository": "https://github.com/karishmaname204/vercel"
+  }
+}

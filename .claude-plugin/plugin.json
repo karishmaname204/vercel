@@ -1,0 +1,13 @@
+{
+  "name": "vercel",
+  "version": "0.1.1",
+  "description": "Conxa plugin for Vercel",
+  "mcpServers": {
+    "conxa": {
+      "command": "node",
+      "args": [
+        ".claude-plugin/bootstrap.js"
+      ]
+    }
+  }
+}

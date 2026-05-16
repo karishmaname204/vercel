@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "vercel-marketplace",
+  "version": "0.1.1",
+  "description": "Conxa plugin for Vercel",
+  "owner": {
+    "name": "Conxa"
+  },
+  "plugins": [
+    {
+      "name": "vercel",
+      "description": "Conxa plugin for Vercel",
+      "version": "0.1.1",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

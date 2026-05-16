@@ -1,0 +1,154 @@
+[
+  {
+    "type": "navigate",
+    "url": "https://vercel.com"
+  },
+  {
+    "type": "focus",
+    "selector": "[aria-label=\"Search\"]",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+\\?q=[^/]+$"
+      }
+    }
+  },
+  {
+    "type": "type",
+    "selector": "[aria-label=\"Search\"]",
+    "value": "{{project_name}}",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+\\?q=[^/]+$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+\\?q=[^/]+$"
+      }
+    }
+  },
+  {
+    "type": "click",
+    "selector": "text=\"{{project_name}}\"",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+\\?q=[^/]+$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "click",
+    "selector": "text=\"Settings\"",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "scroll",
+    "delta_y": 811.0,
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/conxa\\-cosmos/settings$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/conxa\\-cosmos/settings$"
+      }
+    }
+  },
+  {
+    "type": "click",
+    "selector": "text=\"Delete Project\"",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "focus",
+    "selector": "[aria-label=\"Resource Name\"]",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "type",
+    "selector": "[aria-label=\"Resource Name\"]",
+    "value": "{{project_name}}",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "focus",
+    "selector": "[aria-label=\"Verification Code\"]",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "type",
+    "selector": "[aria-label=\"Verification Code\"]",
+    "value": "delete my project",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      }
+    }
+  },
+  {
+    "type": "click",
+    "selector": "text=\"Delete Project\"",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/[^/]+/{{project_name}}$"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/[^/]"
+      }
+    }
+  },
+  {
+    "type": "check",
+    "kind": "url",
+    "pattern": "https://vercel.com/",
+    "url_state": {
+      "before": {
+        "url_pattern": "^https://vercel\\.com/"
+      },
+      "after": {
+        "url_pattern": "^https://vercel\\.com/"
+      }
+    }
+  }
+]

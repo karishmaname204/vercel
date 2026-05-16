@@ -1,0 +1,344 @@
+{
+  "steps": [
+    {
+      "step_id": 2,
+      "intent": "focus_search",
+      "target": {
+        "text": "",
+        "role": "input"
+      },
+      "anchors": [
+        {
+          "text": "search bar",
+          "priority": 2
+        },
+        {
+          "text": "search icon",
+          "priority": 1
+        },
+        {
+          "text": "search button",
+          "priority": 1
+        }
+      ],
+      "fallback": {
+        "text_variants": [],
+        "role": "input"
+      },
+      "selector_context": {
+        "primary": "[aria-label=\"Search\"]",
+        "alternatives": [
+          "input[type=\"search\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_2.jpg"
+    },
+    {
+      "step_id": 3,
+      "intent": "enter_input_value",
+      "target": {
+        "text": "",
+        "role": "textbox"
+      },
+      "anchors": [
+        {
+          "text": "search bar",
+          "priority": 2
+        },
+        {
+          "text": "projects",
+          "priority": 1
+        }
+      ],
+      "fallback": {
+        "text_variants": [],
+        "role": "textbox"
+      },
+      "selector_context": {
+        "primary": "[aria-label=\"Search\"]",
+        "alternatives": [
+          "input[type=\"search\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_3.jpg"
+    },
+    {
+      "step_id": 4,
+      "intent": "click_project_name",
+      "target": {
+        "text": "{{project_name}}",
+        "role": "link"
+      },
+      "anchors": [
+        {
+          "text": "{{project_name}}",
+          "priority": 2
+        }
+      ],
+      "fallback": {
+        "text_variants": [
+          "{{project_name}}"
+        ],
+        "role": "link"
+      },
+      "selector_context": {
+        "primary": "text=\"{{project_name}}\"",
+        "alternatives": [
+          "[role=\"a\"][name=\"{{project_name}}\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_4.jpg"
+    },
+    {
+      "step_id": 5,
+      "intent": "interact_settings",
+      "target": {
+        "text": "Settings",
+        "role": "link"
+      },
+      "anchors": [
+        {
+          "text": "drains",
+          "priority": 2
+        },
+        {
+          "text": "project members",
+          "priority": 1
+        },
+        {
+          "text": "Settings",
+          "priority": 2
+        }
+      ],
+      "fallback": {
+        "text_variants": [
+          "Settings"
+        ],
+        "role": "link"
+      },
+      "selector_context": {
+        "primary": "text=\"Settings\"",
+        "alternatives": [
+          "[role=\"a\"][name=\"Settings\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_5.jpg"
+    },
+    {
+      "step_id": 7,
+      "intent": "activate_control_delete_project",
+      "target": {
+        "text": "Delete Project",
+        "role": "button"
+      },
+      "anchors": [
+        {
+          "text": "delete project button",
+          "priority": 2
+        },
+        {
+          "text": "delete project",
+          "priority": 1
+        },
+        {
+          "text": "transfer",
+          "priority": 1
+        },
+        {
+          "text": "Delete Project",
+          "priority": 2
+        }
+      ],
+      "fallback": {
+        "text_variants": [
+          "Delete Project",
+          "Delete",
+          "Remove"
+        ],
+        "role": "button"
+      },
+      "selector_context": {
+        "primary": "text=\"Delete Project\"",
+        "alternatives": [
+          "input[type=\"submit\"]",
+          "[role=\"button\"][name=\"Delete Project\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_7.jpg"
+    },
+    {
+      "step_id": 8,
+      "intent": "focus_confirm_project_name",
+      "target": {
+        "text": "",
+        "role": "input"
+      },
+      "anchors": [
+        {
+          "text": "resourcename input",
+          "priority": 2
+        },
+        {
+          "text": "delete project button",
+          "priority": 1
+        },
+        {
+          "text": "delete project",
+          "priority": 1
+        }
+      ],
+      "fallback": {
+        "text_variants": [],
+        "role": "input"
+      },
+      "selector_context": {
+        "primary": "[aria-label=\"Resource Name\"]",
+        "alternatives": [
+          "input[name=\"resourceName\"]",
+          "input[type=\"text\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_8.jpg"
+    },
+    {
+      "step_id": 9,
+      "intent": "enter_confitm_project_name",
+      "target": {
+        "text": "",
+        "role": "textbox"
+      },
+      "anchors": [
+        {
+          "text": "resourcename input",
+          "priority": 2
+        },
+        {
+          "text": "delete project",
+          "priority": 1
+        },
+        {
+          "text": "delete project button",
+          "priority": 1
+        }
+      ],
+      "fallback": {
+        "text_variants": [],
+        "role": "textbox"
+      },
+      "selector_context": {
+        "primary": "[aria-label=\"Resource Name\"]",
+        "alternatives": [
+          "input[name=\"resourceName\"]",
+          "input[type=\"text\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_9.jpg"
+    },
+    {
+      "step_id": 10,
+      "intent": "focus_verification_text",
+      "target": {
+        "text": "",
+        "role": "input"
+      },
+      "anchors": [
+        {
+          "text": "delete my project button",
+          "priority": 2
+        },
+        {
+          "text": "delete project",
+          "priority": 1
+        },
+        {
+          "text": "deleting {{project_name}} cannot be undone",
+          "priority": 1
+        }
+      ],
+      "fallback": {
+        "text_variants": [],
+        "role": "input"
+      },
+      "selector_context": {
+        "primary": "[aria-label=\"Verification Code\"]",
+        "alternatives": [
+          "input[name=\"verificationText\"]",
+          "input[type=\"text\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_10.jpg"
+    },
+    {
+      "step_id": 11,
+      "intent": "enter_verification_text_value",
+      "target": {
+        "text": "",
+        "role": "textbox"
+      },
+      "anchors": [
+        {
+          "text": "delete my project",
+          "priority": 2
+        },
+        {
+          "text": "delete project",
+          "priority": 1
+        }
+      ],
+      "fallback": {
+        "text_variants": [],
+        "role": "textbox"
+      },
+      "selector_context": {
+        "primary": "[aria-label=\"Verification Code\"]",
+        "alternatives": [
+          "input[name=\"verificationText\"]",
+          "input[type=\"text\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_11.jpg"
+    },
+    {
+      "step_id": 12,
+      "intent": "activate_control_delete_project",
+      "target": {
+        "text": "Delete Project",
+        "role": "button"
+      },
+      "anchors": [
+        {
+          "text": "delete project button",
+          "priority": 2
+        },
+        {
+          "text": "delete project",
+          "priority": 1
+        },
+        {
+          "text": "delete my project",
+          "priority": 1
+        },
+        {
+          "text": "Delete Project",
+          "priority": 2
+        }
+      ],
+      "fallback": {
+        "text_variants": [
+          "Delete Project",
+          "Delete",
+          "Remove"
+        ],
+        "role": "button"
+      },
+      "selector_context": {
+        "primary": "text=\"Delete Project\"",
+        "alternatives": [
+          "input[type=\"submit\"]",
+          "[role=\"button\"][name=\"Delete Project\"]"
+        ]
+      },
+      "visual_ref": "visuals/Image_12.jpg"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 const fs   = require("fs");
 const os   = require("os");
 const path = require("path");
-const { execSync, fork } = require("child_process");
+const { execSync, fork, spawn } = require("child_process");
 
 const CONXA_HOME       = path.join(os.homedir(), ".conxa");
 const RUNTIME_DIR      = path.join(CONXA_HOME, "runtime");
@@ -78,6 +78,103 @@ function startServer() {
   });
 }
 
+// ─── Setup MCP server (no-dependency inline server for first-time init) ────────
+// Spawns init in the background and serves a minimal MCP server immediately so
+// Claude Code does not time out. Exits cleanly when init finishes so Claude Code
+// auto-reconnects and gets the real server.
+
+function runSetupMcpServer(srcCli) {
+  fs.mkdirSync(RUNTIME_DIR, { recursive: true });
+
+  const initProc = spawn(process.execPath, [srcCli, "init"], {
+    stdio: ["ignore", "ignore", "inherit"],
+    detached: false,
+  });
+
+  function mcpSend(obj) {
+    const body = JSON.stringify(obj);
+    process.stdout.write(`Content-Length: ${Buffer.byteLength(body, "utf8")}\r\n\r\n${body}`);
+  }
+
+  function finishAndExit() {
+    try { registerGlobalMcp(); } catch (_) {}
+    try { registerGlobalClaudeMd(); } catch (_) {}
+    try { installThisPlugin(); } catch (_) {}
+    // Small delay so any in-flight MCP response is flushed before we exit.
+    // Claude Code will auto-reconnect and this time bootstrap takes the normal path.
+    setTimeout(() => process.exit(0), 300);
+  }
+
+  function handleMsg(msg) {
+    const { id, method } = msg;
+    if (method === "initialize") {
+      mcpSend({ jsonrpc: "2.0", id, result: {
+        protocolVersion: "2024-11-05",
+        capabilities: { tools: {} },
+        serverInfo: { name: "conxa-setup", version: "1.0.0" },
+      }});
+    } else if (!method || method.startsWith("notifications/")) {
+      // notifications have no id — no response needed
+    } else if (method === "tools/list") {
+      mcpSend({ jsonrpc: "2.0", id, result: { tools: [{
+        name: "setup_status",
+        description: "Check Conxa runtime setup. npm packages + Playwright Chromium are installing in the background (~2 min on first run).",
+        inputSchema: { type: "object", properties: {}, required: [] },
+      }]}});
+    } else if (method === "tools/call") {
+      const ready = fs.existsSync(BOOTSTRAP_FLAG) && fs.existsSync(SERVER_JS);
+      mcpSend({ jsonrpc: "2.0", id, result: { content: [{ type: "text", text: ready
+        ? "Conxa runtime setup complete. Run /reload-plugins to activate all skills."
+        : "Conxa runtime is still setting up (npm install + Playwright Chromium). Takes ~2 min on first run. Call setup_status again to check."
+      }]}});
+      if (ready) finishAndExit();
+    } else if (id !== undefined) {
+      mcpSend({ jsonrpc: "2.0", id, error: { code: -32601, message: "Method not found" }});
+    }
+  }
+
+  // Auto-exit when init finishes so Claude Code reconnects to the real server
+  initProc.on("exit", (code) => {
+    if (fs.existsSync(BOOTSTRAP_FLAG) && fs.existsSync(SERVER_JS)) {
+      process.stderr.write("[conxa] Runtime init complete — handing off to real server.\n");
+      finishAndExit();
+    } else {
+      process.stderr.write(`[conxa] Init exited with code ${code} but runtime not ready.\n`);
+    }
+  });
+
+  process.stdin.on("end", () => {
+    initProc.kill();
+    process.exit(0);
+  });
+
+  // MCP stdio framing parser (byte-correct, no external deps)
+  let buf = Buffer.alloc(0);
+  process.stdin.on("data", (chunk) => {
+    buf = Buffer.concat([buf, Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, "utf8")]);
+    while (true) {
+      let sep = -1;
+      for (let i = 0; i <= buf.length - 4; i++) {
+        if (buf[i] === 0x0d && buf[i+1] === 0x0a && buf[i+2] === 0x0d && buf[i+3] === 0x0a) {
+          sep = i; break;
+        }
+      }
+      if (sep === -1) break;
+      const headerStr = buf.slice(0, sep).toString("utf8");
+      const m = headerStr.match(/Content-Length:\s*(\d+)/i);
+      if (!m) { buf = buf.slice(sep + 4); continue; }
+      const len = parseInt(m[1], 10);
+      const bodyStart = sep + 4;
+      if (buf.length < bodyStart + len) break;
+      const body = buf.slice(bodyStart, bodyStart + len).toString("utf8");
+      buf = buf.slice(bodyStart + len);
+      try { handleMsg(JSON.parse(body)); } catch (_) {}
+    }
+  });
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
 if (fs.existsSync(BOOTSTRAP_FLAG) && fs.existsSync(SERVER_JS)) {
   registerGlobalMcp();
   registerGlobalClaudeMd();
@@ -89,19 +186,5 @@ if (fs.existsSync(BOOTSTRAP_FLAG) && fs.existsSync(SERVER_JS)) {
     process.stderr.write("[conxa] bootstrap: cli.js not found next to bootstrap.js\n");
     process.exit(1);
   }
-  fs.mkdirSync(RUNTIME_DIR, { recursive: true });
-  try {
-    execSync(`node "${srcCli}" init`, { stdio: ["ignore", "pipe", "inherit"] });
-  } catch (e) {
-    process.stderr.write(`[conxa] bootstrap: init failed: ${e.message}\n`);
-    process.exit(1);
-  }
-  if (!fs.existsSync(SERVER_JS)) {
-    process.stderr.write("[conxa] bootstrap: server.js not found after init\n");
-    process.exit(1);
-  }
-  registerGlobalMcp();
-  registerGlobalClaudeMd();
-  installThisPlugin();
-  startServer();
+  runSetupMcpServer(srcCli);
 }

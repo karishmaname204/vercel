@@ -2,15 +2,30 @@
 
 Automate [https://vercel.com/login](https://vercel.com/login) with Claude using this Conxa plugin.
 
-## Install
+## Install (two commands)
 
-Add to **Claude Code** via the marketplace:
+Claude Code separates *registering a catalog* from *enabling a plugin*, so
+both commands are required:
 
 ```
-/plugin marketplace add github.com/<your-org>/vercel
+/plugin marketplace add https://github.com/karishmaname204/vercel
+/plugin install vercel@vercel-marketplace
 ```
 
-The shared Conxa runtime installs automatically on first use.
+- The first command clones this repo into `~/.claude/plugins/marketplaces/`.
+  No code runs yet — Claude Code never auto-enables unknown plugins.
+- The second command enables the plugin, which starts its MCP server.
+  On first run this bootstraps the shared Conxa runtime at `~/.conxa/`
+  (copies the runtime, runs `npm install`, downloads Playwright Chromium),
+  registers the shared `conxa` MCP in `~/.claude/settings.json`, and
+  registers this plugin in `~/.conxa/registry.json`.
+- Installing a second Conxa plugin later is idempotent: the runtime is
+  reused (the bootstrap checks `~/.conxa/.bootstrapped`), only the new
+  plugin's data is added to the registry, and every plugin shares the
+  same MCP server.
+
+After install completes, restart your Claude Code session so the shared
+MCP host attaches.
 
 ## Available Skills
 

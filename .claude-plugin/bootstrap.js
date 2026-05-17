@@ -57,8 +57,14 @@ function isServerRunning() {
   try {
     const pid = parseInt(fs.readFileSync(PID_FILE, "utf8").trim(), 10);
     if (isNaN(pid)) return false;
-    process.kill(pid, 0);
-    return true;
+    process.kill(pid, 0); // throws if dead
+    // Verify the live PID is actually our server (guards against PID reuse)
+    const { execSync: _exec } = require("child_process");
+    const cmd = process.platform === "win32"
+      ? `wmic process where "ProcessId=${pid}" get CommandLine /value 2>nul`
+      : `ps -p ${pid} -o args=`;
+    const out = _exec(cmd, { encoding: "utf8", stdio: ["ignore","pipe","ignore"] }).toLowerCase();
+    return out.includes("server.js");
   } catch (_) {
     return false;
   }

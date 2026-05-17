@@ -93,9 +93,11 @@ function runSetupMcpServer(srcCli) {
   fs.mkdirSync(RUNTIME_DIR, { recursive: true });
 
   const initProc = spawn(process.execPath, [srcCli, "init"], {
-    stdio: ["ignore", "ignore", "inherit"],
+    stdio: ["ignore", "pipe", "inherit"],  // stdout piped so we can show it in terminal via stderr
     detached: false,
   });
+  // Route init stdout to stderr — stdout is the MCP pipe, stderr shows in the user's terminal
+  initProc.stdout.on("data", chunk => process.stderr.write(chunk));
 
   function mcpSend(obj) {
     const body = JSON.stringify(obj);

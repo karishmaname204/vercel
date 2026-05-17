@@ -118,11 +118,11 @@ function init() {
     if (fs.existsSync(src)) fs.copyFileSync(src, path.join(RUNTIME_DIR, file));
   }
 
-  process.stderr.write("[conxa] Running npm install...\n");
-  execSync("npm install --prefer-offline --silent", { cwd: RUNTIME_DIR, stdio: ["ignore", "pipe", "inherit"] });
+  process.stdout.write("[conxa] Running npm install...\n");
+  execSync("npm install --prefer-offline", { cwd: RUNTIME_DIR, stdio: ["ignore", process.stdout, process.stderr] });
 
-  process.stderr.write("[conxa] Installing Playwright Chromium...\n");
-  execSync("npx playwright install chromium", { cwd: RUNTIME_DIR, stdio: ["ignore", "pipe", "inherit"] });
+  process.stdout.write("[conxa] Installing Playwright Chromium...\n");
+  execSync("npx playwright install chromium", { cwd: RUNTIME_DIR, stdio: ["ignore", process.stdout, process.stderr] });
 
   const pkg = fs.existsSync(path.join(RUNTIME_DIR, "package.json"))
     ? JSON.parse(fs.readFileSync(path.join(RUNTIME_DIR, "package.json"), "utf8"))
